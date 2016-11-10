@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
 namespace Vuforia
 {
 	/// <summary>
 	/// A custom handler that implements the ITrackableEventHandler interface.
 	/// </summary>
-	public class TextEventHandler : MonoBehaviour,
+	public class TextTrackableEventHandler : MonoBehaviour,
 	ITrackableEventHandler
 	{
-		string coupon_value = "This is slow";
-		public TextMesh couponValueText;
+		string coupon_value;
+		GameController gameController;
+		GameObject wordObject;
 
 		#region PRIVATE_MEMBER_VARIABLES
 
@@ -32,7 +32,10 @@ namespace Vuforia
 				mTrackableBehaviour.RegisterTrackableEventHandler(this);
 			}
 
+			gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController>();
+			wordObject = GameObject.FindGameObjectWithTag ("Word");
 		}
+
 
 		#endregion // UNTIY_MONOBEHAVIOUR_METHODS
 
@@ -87,10 +90,10 @@ namespace Vuforia
 
 			Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
 
-//			CouponKeyFound = mTrackableBehaviour.TrackableName;
-//			StartCoroutine(loadCouponValue (mTrackableBehaviour.TrackableName));
-			StartCoroutine(loadCouponValue ("qwertyuiop"));
-			couponValueText.text = coupon_value;
+			if ((gameController.getCouponValue()).Equals("")){
+				StartCoroutine (loadCouponValue (mTrackableBehaviour.TrackableName));
+			}
+
 		}
 
 
@@ -127,7 +130,7 @@ namespace Vuforia
 					JSONObject json = new JSONObject(request.downloadHandler.text);
 					coupon_value = json ["coupon_value"].ToString ();
 					coupon_value = coupon_value.Substring (1, coupon_value.Length - 2);
-					Debug.Log (coupon_value);
+					gameController.setCouponValue (coupon_value);
 				}
 			}
 		}

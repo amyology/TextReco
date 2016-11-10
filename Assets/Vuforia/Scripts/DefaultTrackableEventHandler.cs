@@ -17,8 +17,6 @@ namespace Vuforia
     public class DefaultTrackableEventHandler : MonoBehaviour,
                                                 ITrackableEventHandler
 	{
-		string coupon_value = "This is slow";
-		public TextMesh couponValueText;
 
 		#region PRIVATE_MEMBER_VARIABLES
 
@@ -93,9 +91,6 @@ namespace Vuforia
 
 			Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
 
-			StartCoroutine(loadCouponValue (mTrackableBehaviour.TrackableName));
-//			StartCoroutine(loadCouponValue ("qwertyuiop"));
-			couponValueText.text = coupon_value;
 		}
 
 
@@ -121,20 +116,5 @@ namespace Vuforia
 
 		#endregion // PRIVATE_METHODS
 
-		IEnumerator loadCouponValue(string coupon_key) {
-			using (UnityWebRequest request = UnityWebRequest.Get("http://localhost:3000/coupons/" + coupon_key + ".json"))
-			{
-				yield return request.Send();
-
-				if (request.isError) {
-					Debug.Log(request.error);
-				} else {
-					JSONObject json = new JSONObject(request.downloadHandler.text);
-					coupon_value = json ["coupon_value"].ToString ();
-					coupon_value = coupon_value.Substring (1, coupon_value.Length - 2);
-					Debug.Log (coupon_value);
-				}
-			}
-		}
 	}
 }
