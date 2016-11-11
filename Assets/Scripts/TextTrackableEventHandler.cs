@@ -13,6 +13,7 @@ namespace Vuforia
 		string coupon_value;
 		GameController gameController;
 		GameObject wordObject;
+		TextMesh displayText;
 
 		#region PRIVATE_MEMBER_VARIABLES
 
@@ -32,8 +33,9 @@ namespace Vuforia
 				mTrackableBehaviour.RegisterTrackableEventHandler(this);
 			}
 
-			gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController>();
+			gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
 			wordObject = GameObject.FindGameObjectWithTag ("Word");
+			displayText = GameObject.FindGameObjectWithTag ("DisplayText").GetComponent<TextMesh> ();
 		}
 
 
@@ -94,6 +96,7 @@ namespace Vuforia
 				StartCoroutine (loadCouponValue (mTrackableBehaviour.TrackableName));
 			}
 
+			gameController.setCouponValue(mTrackableBehaviour.TrackableName);
 		}
 
 
@@ -120,7 +123,7 @@ namespace Vuforia
 		#endregion // PRIVATE_METHODS
 
 		IEnumerator loadCouponValue(string coupon_key) {
-			using (UnityWebRequest request = UnityWebRequest.Get("http://localhost:3000/coupons/" + coupon_key + ".json"))
+			using (UnityWebRequest request = UnityWebRequest.Get("http://unity-api.herokuapp.com/coupons/" + coupon_key + ".json"))
 			{
 				yield return request.Send();
 

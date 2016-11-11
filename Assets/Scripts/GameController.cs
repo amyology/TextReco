@@ -23,8 +23,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void setCouponValue(string value){
+		Debug.Log ("This is the value: " + value);
 		coupon_value = value;
 		couponValueText.text = coupon_value;
+		Debug.Log ("This is the couponValue: " + couponValueText.text);
 	}
 
 	public string getCouponValue(){
